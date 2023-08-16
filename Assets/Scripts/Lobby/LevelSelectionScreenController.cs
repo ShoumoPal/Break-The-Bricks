@@ -14,6 +14,7 @@ public class LevelSelectionScreenController : MonoBehaviour
 
     private void GoBack()
     {
+        SoundManager.Instance.PlayFX(SoundType.ButtonClick);
         levelSelectionPanel.SetActive(false);
     }
 }
