@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SoundManager : MonoBehaviour
 {
@@ -11,7 +12,7 @@ public class SoundManager : MonoBehaviour
 
     [SerializeField] private Sounds[] sounds;
 
-    private void Start()
+    private void Awake()
     {
         if(instance == null)
         {
@@ -20,13 +21,28 @@ public class SoundManager : MonoBehaviour
         }
         else
             Destroy(gameObject);
+
     }
+
+    public void ChangeVol(Slider slider)
+    {
+        AudioListener.volume = slider.value;
+    }
+
     public void PlayBG(SoundType sound)
     {
         AudioClip clip = getAudioClip(sound);
         soundBG.clip = clip;
         soundBG.volume = getVolume(sound);
         soundBG.Play();
+    }
+
+    public void PlayFX(SoundType sound)
+    {
+        AudioClip clip = getAudioClip(sound);
+        soundFX.clip = clip;
+        soundFX.volume = getVolume(sound);
+        soundFX.Play();
     }
 
     private float getVolume(SoundType soundType)
@@ -52,7 +68,8 @@ public class Sounds
 }
 public enum SoundType
 {
-    LobbyMusic
+    LobbyMusic,
+    ButtonClick
 }
 
 
