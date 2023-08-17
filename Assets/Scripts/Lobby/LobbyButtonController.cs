@@ -6,10 +6,13 @@ using UnityEngine.UI;
 public class LobbyButtonController : MonoBehaviour
 {
     [SerializeField] private Button playButton;
+    [SerializeField] private Button tutButton;
     [SerializeField] private Button quitButton;
     [SerializeField] private Button volumeButton;
     [SerializeField] private GameObject levelSelectionPanel;
     [SerializeField] private GameObject volumePanel;
+    [SerializeField] private GameObject tutScreen;
+
     private bool isActive;
 
     private void Start()
@@ -17,7 +20,13 @@ public class LobbyButtonController : MonoBehaviour
         playButton.onClick.AddListener(Play);
         quitButton.onClick.AddListener(Quit);
         volumeButton.onClick.AddListener(ShowSlider);
+        tutButton.onClick.AddListener(ShowTut);
         isActive = true;
+    }
+
+    private void ShowTut()
+    {
+        tutScreen.SetActive(true);
     }
 
     private void ShowSlider()

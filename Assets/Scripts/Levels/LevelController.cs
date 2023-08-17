@@ -1,8 +1,9 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class LevelController : MonoBehaviour
 {
-    private int numOfBricks;
+    public int numOfBricks;
     private bool gameOver;
     [SerializeField] private bool levelComplete;
     [SerializeField] GameObject brickGrid;
@@ -13,7 +14,7 @@ public class LevelController : MonoBehaviour
     {
         gameOver = false;
         levelComplete = false;
-        numOfBricks = LevelManager.Instance.GetNumberOfBricks(1);
+        numOfBricks = LevelManager.Instance.GetNumberOfBricks(SceneManager.GetActiveScene().buildIndex);
     }
     private void Update()
     {
@@ -28,14 +29,12 @@ public class LevelController : MonoBehaviour
 
         if (gameOver)
         {
-            Debug.Log("GameOver");
             Time.timeScale = 0.0f;
             gameOverMenu.SetActive(true);
 
         }
         if (levelComplete)
         {
-            Debug.Log("LevelComplete!");
             levelCompleteMenu.SetActive(true);
         }
     }

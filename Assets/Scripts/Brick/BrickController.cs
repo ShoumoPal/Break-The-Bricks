@@ -51,6 +51,7 @@ public class BrickController : MonoBehaviour
 
             if (brickNumber == 0)
             {
+                levelController.DecreaseBricks();
                 DestroyBrick();
             }
         }
@@ -63,6 +64,7 @@ public class BrickController : MonoBehaviour
         RaycastHit2D[] topHits = Physics2D.RaycastAll(initialPos, Vector2.up, 50f, layerMask);
         RaycastHit2D[] bottomHits = Physics2D.RaycastAll(initialPos, -Vector2.up, 50f, layerMask);
 
+        int bricks = (rightHits.Length - 1) + (leftHits.Length - 1) + (topHits.Length - 1) + (bottomHits.Length - 1) + 1;
         for (int i = 0; i < rightHits.Length; i++)
         {
             RaycastHit2D hit = rightHits[i];
@@ -83,23 +85,30 @@ public class BrickController : MonoBehaviour
             RaycastHit2D hit = bottomHits[i];
             hit.collider.GetComponent<BrickController>().DestroyBrick();
         }
+        for(int i = 0; i < bricks; i++)
+        {
+            levelController.DecreaseBricks();
+        }
     }
 
     public void DestroyBrick()
     {
         GameObject temp = null;
-        levelController.DecreaseBricks();
+        //levelController.DecreaseBricks();
         if (type == BrickType.Stationary)
         {
             temp = Instantiate(explosion1.gameObject, transform.position, Quaternion.identity);
+            SoundManager.Instance.PlayFX(SoundType.Brick_1_Destroy);
         }
         else if (type == BrickType.Moving)
         {
             temp = Instantiate(explosion2.gameObject, transform.position, Quaternion.identity);
+            SoundManager.Instance.PlayFX(SoundType.Brick_2_Destroy);
         }
         else if(type == BrickType.Destroyer)
         {
             temp = Instantiate(explosion3.gameObject, transform.position, Quaternion.identity);
+            SoundManager.Instance.PlayFX(SoundType.Brick_3_Destroy);
         }
         Destroy(gameObject);
         Destroy(temp, 2.5f);
