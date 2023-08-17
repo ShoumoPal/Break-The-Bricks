@@ -9,6 +9,7 @@ public class ShooterController : MonoBehaviour
     [SerializeField] private GameObject arrow;
     [SerializeField] private float force;
     [SerializeField] private int numberOfBalls;
+    [SerializeField] private LevelController levelController;
 
     private int ballsReturned;
     private bool hasBallsReturned;
@@ -16,11 +17,13 @@ public class ShooterController : MonoBehaviour
     private Camera mainCamera;
     private bool isRunning = false;
     private bool isShooting = false;
-
+    private bool decreasedHeight;
     private void Start()
     {
-        ballsReturned = numberOfBalls;
+        ballsReturned = 0;
         mainCamera = Camera.main;
+        decreasedHeight = true;
+        hasBallsReturned = true;
     }
     private void Update()
     {
@@ -34,7 +37,18 @@ public class ShooterController : MonoBehaviour
         }
 
         if(ballsReturned == numberOfBalls)
+        {
+            decreasedHeight = false;
             hasBallsReturned = true;
+            ballsReturned = 0;
+        }
+
+        if(hasBallsReturned && !decreasedHeight)
+        {
+            decreasedHeight = true;
+            levelController.MoveBricks();
+        }
+            
 
         if(Input.GetMouseButtonDown(0) && !isRunning && hasBallsReturned)
         {

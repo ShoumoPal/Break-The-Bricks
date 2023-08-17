@@ -17,7 +17,7 @@ public class BrickController : MonoBehaviour
     {
         if(collision.gameObject.GetComponent<BallController>() != null)
         {
-            //SoundManager.Instance.PlayFX(SoundType.Brick_1_Hit);
+            SoundManager.Instance.PlayFX(SoundType.Brick_1_Hit);
             brickNumber--;
             text.text = brickNumber.ToString();
             overlay.SetActive(true);
@@ -29,10 +29,6 @@ public class BrickController : MonoBehaviour
                 Destroy(gameObject);
                 Destroy(temp, 2.5f);
             }
-        }
-        if (collision.gameObject.CompareTag("Ground"))
-        {
-            levelController.GameOver();
         }
     }
     private void RemoveOverlay()

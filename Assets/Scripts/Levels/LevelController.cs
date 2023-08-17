@@ -5,6 +5,7 @@ public class LevelController : MonoBehaviour
     private int numOfBricks;
     private bool gameOver;
     [SerializeField] private bool levelComplete;
+    [SerializeField] GameObject brickGrid;
 
     private void Awake()
     {
@@ -18,6 +19,10 @@ public class LevelController : MonoBehaviour
         {
             levelComplete = true;
         }
+        if(brickGrid.transform.position.y < -4f)
+        {
+            gameOver = true;
+        }  
 
         if (gameOver)
         {
@@ -40,6 +45,11 @@ public class LevelController : MonoBehaviour
     {
         numOfBricks--;
     }
-    
+    public void MoveBricks()
+    {
+        Vector3 temp = brickGrid.transform.position;
+        temp.y -= 1;
+        brickGrid.transform.position = temp;
+    }
 
 }
