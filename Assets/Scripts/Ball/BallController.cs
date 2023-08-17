@@ -12,11 +12,11 @@ public class BallController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         isGrounded = false;
     }
-    private void Update()
+    private void FixedUpdate()
     {
         if(rb.velocity.y == 0 && !isGrounded)
         {
-            rb.velocity = Vector3.down;
+            rb.rotation = 45f;
         }
     }
     private void OnCollisionEnter2D(Collision2D collision)
