@@ -36,7 +36,6 @@ public class LevelController : MonoBehaviour
         if (levelComplete)
         {
             Debug.Log("LevelComplete!");
-            Time.timeScale = 0.0f;
             levelCompleteMenu.SetActive(true);
         }
     }
