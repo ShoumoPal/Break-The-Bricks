@@ -51,7 +51,7 @@ public class LevelManager : MonoBehaviour
     {
         SetLevelStatus(SceneManager.GetActiveScene().name, LevelStatus.Completed);
 
-        SetLevelStatus(GetNameFromIndex(SceneManager.GetActiveScene().buildIndex + 1), LevelStatus.Completed);
+        SetLevelStatus(GetNameFromIndex(SceneManager.GetActiveScene().buildIndex + 1), LevelStatus.Unlocked);
     }
 
     private string GetNameFromIndex(int index)

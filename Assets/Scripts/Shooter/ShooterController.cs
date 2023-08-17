@@ -1,4 +1,5 @@
 using System.Collections;
+using TMPro;
 using UnityEngine;
 
 public class ShooterController : MonoBehaviour
@@ -11,6 +12,7 @@ public class ShooterController : MonoBehaviour
     [SerializeField] private int numberOfBalls;
     [SerializeField] private LevelController levelController;
 
+    private int currentBallCount;
     private int ballsReturned;
     private bool hasBallsReturned;
     private Vector3 mousePos;
@@ -24,6 +26,7 @@ public class ShooterController : MonoBehaviour
         mainCamera = Camera.main;
         decreasedHeight = true;
         hasBallsReturned = true;
+        currentBallCount = numberOfBalls;
     }
     private void Update()
     {
@@ -38,6 +41,7 @@ public class ShooterController : MonoBehaviour
 
         if(ballsReturned == numberOfBalls)
         {
+            Time.timeScale = 1.0f;
             decreasedHeight = false;
             hasBallsReturned = true;
             ballsReturned = 0;
@@ -66,11 +70,17 @@ public class ShooterController : MonoBehaviour
         transform.rotation = Quaternion.Euler(0, 0, rotZ); 
     }
 
+    public int GetCurrentBalls()
+    {
+        return currentBallCount;
+    }
+
     private IEnumerator ShootBall()
     {
         ballsReturned = 0;
         for (int i = 0; i < numberOfBalls; i++)
         {
+            currentBallCount--;
             Vector3 rotation = (arrow.transform.position - transform.position).normalized;
             GameObject shotBall = Instantiate(ball, arrow.transform.position, Quaternion.identity);
             Rigidbody2D rb = shotBall.GetComponent<Rigidbody2D>();
@@ -90,6 +100,7 @@ public class ShooterController : MonoBehaviour
     }
     public void IncreaseBalls()
     {
+        currentBallCount++;
         ballsReturned++;
     }
 }

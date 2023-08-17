@@ -6,6 +6,8 @@ public class LevelController : MonoBehaviour
     private bool gameOver;
     [SerializeField] private bool levelComplete;
     [SerializeField] GameObject brickGrid;
+    [SerializeField] GameObject gameOverMenu;
+    [SerializeField] GameObject levelCompleteMenu;
 
     private void Awake()
     {
@@ -27,10 +29,15 @@ public class LevelController : MonoBehaviour
         if (gameOver)
         {
             Debug.Log("GameOver");
+            Time.timeScale = 0.0f;
+            gameOverMenu.SetActive(true);
+
         }
         if (levelComplete)
         {
             Debug.Log("LevelComplete!");
+            Time.timeScale = 0.0f;
+            levelCompleteMenu.SetActive(true);
         }
     }
     public void GameOver()
