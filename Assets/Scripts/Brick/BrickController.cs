@@ -1,22 +1,27 @@
+using System;
 using UnityEngine;
 
 public class BrickController : MonoBehaviour
 {
     [SerializeField] private ParticleSystem explosion1;
     [SerializeField] private ParticleSystem explosion2;
+    [SerializeField] private ParticleSystem explosion3;
     [SerializeField] private int brickNumber;
     [SerializeField] private GameObject overlay;
     [SerializeField] TextMesh text;
     [SerializeField] BrickType type;
     [SerializeField] private LevelController levelController;
-
+    [SerializeField] private LayerMask layerMask;
     [SerializeField] private float amp;
 
     private Vector3 initialPos;
 
     private void Start()
     {
-        text.text = brickNumber.ToString();
+        if(type != BrickType.Destroyer)
+        {
+            text.text = brickNumber.ToString();
+        }
         initialPos = transform.position;
     }
     private void FixedUpdate()
@@ -32,26 +37,74 @@ public class BrickController : MonoBehaviour
         {
             SoundManager.Instance.PlayFX(SoundType.Brick_1_Hit);
             brickNumber--;
-            text.text = brickNumber.ToString();
+            if(type != BrickType.Destroyer)
+            {
+                text.text = brickNumber.ToString();
+            }
+            else
+            {
+                Demolish();
+                DestroyBrick();
+            }
             overlay.SetActive(true);
             Invoke("RemoveOverlay", 0.25f);
+
             if (brickNumber == 0)
             {
-                GameObject temp = null;
-                levelController.DecreaseBricks();
-                if(type == BrickType.Stationary)
-                {
-                    temp = Instantiate(explosion1.gameObject, transform.position, Quaternion.identity);
-                }
-                else if(type == BrickType.Moving)
-                {
-                    temp = Instantiate(explosion2.gameObject, transform.position, Quaternion.identity);
-                }
-                Destroy(gameObject);
-                Destroy(temp, 2.5f);
+                DestroyBrick();
             }
         }
     }
+
+    private void Demolish()
+    {
+        RaycastHit2D[] rightHits = Physics2D.RaycastAll(initialPos, Vector2.right, 50f, layerMask);
+        RaycastHit2D[] leftHits = Physics2D.RaycastAll(initialPos, -Vector2.right, 50f, layerMask);
+        RaycastHit2D[] topHits = Physics2D.RaycastAll(initialPos, Vector2.up, 50f, layerMask);
+        RaycastHit2D[] bottomHits = Physics2D.RaycastAll(initialPos, -Vector2.up, 50f, layerMask);
+
+        for (int i = 0; i < rightHits.Length; i++)
+        {
+            RaycastHit2D hit = rightHits[i];
+            hit.collider.GetComponent<BrickController>().DestroyBrick();
+        }
+        for (int i = 0; i < leftHits.Length; i++)
+        {
+            RaycastHit2D hit = leftHits[i];
+            hit.collider.GetComponent<BrickController>().DestroyBrick();
+        }
+        for (int i = 0; i < topHits.Length; i++)
+        {
+            RaycastHit2D hit = topHits[i];
+            hit.collider.GetComponent<BrickController>().DestroyBrick();
+        }
+        for (int i = 0; i < bottomHits.Length; i++)
+        {
+            RaycastHit2D hit = bottomHits[i];
+            hit.collider.GetComponent<BrickController>().DestroyBrick();
+        }
+    }
+
+    public void DestroyBrick()
+    {
+        GameObject temp = null;
+        levelController.DecreaseBricks();
+        if (type == BrickType.Stationary)
+        {
+            temp = Instantiate(explosion1.gameObject, transform.position, Quaternion.identity);
+        }
+        else if (type == BrickType.Moving)
+        {
+            temp = Instantiate(explosion2.gameObject, transform.position, Quaternion.identity);
+        }
+        else if(type == BrickType.Destroyer)
+        {
+            temp = Instantiate(explosion3.gameObject, transform.position, Quaternion.identity);
+        }
+        Destroy(gameObject);
+        Destroy(temp, 2.5f);
+    }
+
     private void RemoveOverlay()
     {
         overlay.SetActive(false);
@@ -60,6 +113,7 @@ public class BrickController : MonoBehaviour
     public enum BrickType
     {
         Stationary,
-        Moving
+        Moving,
+        Destroyer
     }
 }
