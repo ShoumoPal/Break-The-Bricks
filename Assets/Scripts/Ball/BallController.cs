@@ -16,7 +16,7 @@ public class BallController : MonoBehaviour
     {
         if(rb.velocity.y == 0 && !isGrounded)
         {
-            rb.rotation = 45f;
+            rb.AddForce(Vector2.up);
         }
     }
     private void OnCollisionEnter2D(Collision2D collision)
