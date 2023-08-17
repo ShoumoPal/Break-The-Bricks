@@ -70,7 +70,10 @@ public enum SoundType
 {
     LobbyMusic,
     ButtonClick,
-    Brick_1_Hit
+    Brick_1_Hit,
+    Brick_1_Destroy,
+    Brick_2_Destroy,
+    Brick_3_Destroy
 }
 
 
