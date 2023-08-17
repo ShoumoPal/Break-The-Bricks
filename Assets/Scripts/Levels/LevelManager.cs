@@ -1,3 +1,5 @@
+using System;
+using System.Globalization;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -6,8 +8,8 @@ public class LevelManager : MonoBehaviour
     private static LevelManager instance;
     public static LevelManager Instance { get { return instance; } }
 
-    [SerializeField] private string[] Levels;
-
+    [SerializeField] private Levels[] levels;
+    
     private void Awake()
     {
         if(instance == null)
@@ -24,13 +26,13 @@ public class LevelManager : MonoBehaviour
     {
         SoundManager.Instance.PlayBG(SoundType.LobbyMusic);
 
-        if (GetLevelStatus(Levels[0]) == LevelStatus.Locked)
+        if (GetLevelStatus(levels[0].name) == LevelStatus.Locked)
         {
-            SetLevelStatus(Levels[0], LevelStatus.Unlocked);
+            SetLevelStatus(levels[0].name, LevelStatus.Unlocked);
         }
 
-        for(int i = 1; i < Levels.Length; i++) {
-            SetLevelStatus(Levels[i], LevelStatus.Locked);
+        for(int i = 1; i < levels.Length; i++) {
+            SetLevelStatus(levels[i].name, LevelStatus.Locked);
         }      
     }
 
@@ -49,7 +51,7 @@ public class LevelManager : MonoBehaviour
     {
         SetLevelStatus(SceneManager.GetActiveScene().name, LevelStatus.Completed);
 
-        SetLevelStatus(GetNameFromIndex(SceneManager.GetActiveScene().buildIndex + 1), LevelStatus.Completed);
+        SetLevelStatus(GetNameFromIndex(SceneManager.GetActiveScene().buildIndex + 1), LevelStatus.Unlocked);
     }
 
     private string GetNameFromIndex(int index)
@@ -59,5 +61,17 @@ public class LevelManager : MonoBehaviour
         string name = path.Substring(slash + 1);
         int dot = name.LastIndexOf('.');
         return name.Substring(0, dot);
+    }
+
+    public int GetNumberOfBricks(int level)
+    {
+        return levels[level - 1].numberOfBricks;
+    }
+
+    [Serializable]
+    public class Levels
+    {
+        public string name;
+        public int numberOfBricks;
     }
 }

@@ -1,4 +1,5 @@
 using System.Collections;
+using TMPro;
 using UnityEngine;
 
 public class ShooterController : MonoBehaviour
@@ -9,31 +10,55 @@ public class ShooterController : MonoBehaviour
     [SerializeField] private GameObject arrow;
     [SerializeField] private float force;
     [SerializeField] private int numberOfBalls;
+    [SerializeField] private LevelController levelController;
 
+    private int currentBallCount;
+    private int ballsReturned;
+    private bool hasBallsReturned;
     private Vector3 mousePos;
     private Camera mainCamera;
     private bool isRunning = false;
     private bool isShooting = false;
-
+    private bool decreasedHeight;
     private void Start()
     {
+        ballsReturned = 0;
         mainCamera = Camera.main;
+        decreasedHeight = true;
+        hasBallsReturned = true;
+        currentBallCount = numberOfBalls;
     }
     private void Update()
     {
         float horizontal = Input.GetAxisRaw("Horizontal");
         mousePos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
+        MoveDirectionalArrow(mousePos);
 
         if (!isShooting)
         {
             Move(horizontal);
-            MoveDirectionalArrow(mousePos);
         }
 
-        if(Input.GetMouseButtonDown(0) && !isRunning)
+        if(ballsReturned == numberOfBalls)
+        {
+            Time.timeScale = 1.0f;
+            decreasedHeight = false;
+            hasBallsReturned = true;
+            ballsReturned = 0;
+        }
+
+        if(hasBallsReturned && !decreasedHeight)
+        {
+            decreasedHeight = true;
+            levelController.MoveBricks();
+        }
+            
+
+        if(Input.GetMouseButtonDown(0) && !isRunning && hasBallsReturned)
         {
             isRunning = true;
             isShooting = true;
+            hasBallsReturned = false;
             StartCoroutine(ShootBall());
         }
     }
@@ -45,16 +70,24 @@ public class ShooterController : MonoBehaviour
         transform.rotation = Quaternion.Euler(0, 0, rotZ); 
     }
 
+    public int GetCurrentBalls()
+    {
+        return currentBallCount;
+    }
+
     private IEnumerator ShootBall()
     {
-        for(int i = 0; i < numberOfBalls; i++)
+        ballsReturned = 0;
+        for (int i = 0; i < numberOfBalls; i++)
         {
+            currentBallCount--;
             Vector3 rotation = (arrow.transform.position - transform.position).normalized;
             GameObject shotBall = Instantiate(ball, arrow.transform.position, Quaternion.identity);
             Rigidbody2D rb = shotBall.GetComponent<Rigidbody2D>();
             rb.AddForce(rotation * force);
             yield return new WaitForSeconds(0.2f);
         }
+        
         isRunning = false;
         isShooting = false;
     }
@@ -64,5 +97,10 @@ public class ShooterController : MonoBehaviour
         Vector3 temp = transform.position;
         temp.x = Mathf.Clamp(temp.x + speed * _horizontal * Time.deltaTime, -boundX, boundX);
         transform.position = temp;
+    }
+    public void IncreaseBalls()
+    {
+        currentBallCount++;
+        ballsReturned++;
     }
 }
