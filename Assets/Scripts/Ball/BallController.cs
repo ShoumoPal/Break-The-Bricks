@@ -20,6 +20,8 @@ public class BallController : MonoBehaviour
     {
         if(collision.GetComponent<ShooterController>() != null)
         {
+            ShooterController shooter = collision.GetComponent<ShooterController>();
+            shooter.IncreaseBalls();
             Destroy(gameObject);
         }
     }

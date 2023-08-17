@@ -69,7 +69,8 @@ public class Sounds
 public enum SoundType
 {
     LobbyMusic,
-    ButtonClick
+    ButtonClick,
+    Brick_1_Hit
 }
 
 
