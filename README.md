@@ -1,5 +1,13 @@
 ## Here is a remake of the famous Break the Brick game. This has the following features:
 
+### Concepts used:
+
+<p>1. Singleton for Level and Sound managers<\p>
+<p>2. Particle effects and music<\p>
+<p>3. Raycasting for destroyer block<\p>
+
+<hr>
+  
 <h5>1. Lobby Screen </h5>
 
 <img src = "https://github.com/ShoumoPal/Break-The-Bricks/assets/46050414/bf02a538-7681-45c5-9716-dbaa00c95dce" width = 50% height = 50%>
