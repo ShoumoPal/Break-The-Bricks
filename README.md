@@ -2,9 +2,9 @@
 
 ### Concepts used:
 
-<p>1. Singleton for Level and Sound managers<\p>
-<p>2. Particle effects and music<\p>
-<p>3. Raycasting for destroyer block<\p>
+<p>1. Singleton for Level and Sound managers </p>
+<p>2. Particle effects and music </p>
+<p>3. Raycasting for destroyer block </p>
 
 <hr>
   
